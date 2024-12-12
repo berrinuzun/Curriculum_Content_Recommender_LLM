@@ -6,6 +6,13 @@ try:
 except KeyError:
     raise Exception("API key not found. Please set the API_KEY environment variable.")
 
+generation_config = {
+    "temperature": 0.4,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_output_tokens": 8192,
+}
+
 class Agent:
     def __init__(self, name, role):
         self.name = name
