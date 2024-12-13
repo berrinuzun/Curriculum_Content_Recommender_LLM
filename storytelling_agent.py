@@ -52,12 +52,21 @@ storytelling_agent = """
 """
 
 from agent import Agent
+import google.generativeai as genai
 import json
+
+generation_config = {
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_output_tokens": 8192,
+}
 
 class StorytellingAgent(Agent):
     
     def __init__(self, name, role):
         super().__init__(name, role)
+        self.model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=role, generation_config=generation_config)
         
     def get_user_intent(self, academic_content):
         
