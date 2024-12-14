@@ -47,12 +47,7 @@ from agent import Agent
 import google.generativeai as genai
 import json
 
-generation_config = {
-    "temperature": 0.6,
-    "top_p": 0.95,
-    "top_k": 64,
-    "max_output_tokens": 8192,
-}
+
 
 class LectureNotesGeneratorAgent(Agent):
     
