@@ -64,6 +64,8 @@ generation_config = {
 
 class StorytellingAgent(Agent):
     
+    prompt = storytelling_agent
+    
     def __init__(self, name, role):
         super().__init__(name, role)
         self.model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=role, generation_config=generation_config)

@@ -58,6 +58,8 @@ import json
 from serpapi import GoogleSearch
 
 class ArticleRetrievalAgent(Agent):
+    
+    prompt = article_retrieval_agent
 
     def __init__(self, name, role):
         super().__init__(name, role)
