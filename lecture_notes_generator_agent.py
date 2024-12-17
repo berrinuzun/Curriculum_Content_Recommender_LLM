@@ -51,17 +51,16 @@ import json
 
 class LectureNotesGeneratorAgent(Agent):
     
+    prompt = lecture_notes_generator_agent
+    
     def __init__(self, name, role):
         super().__init__(name, role)
-        self.model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=role, generation_config=generation_config)
-        
     
     def get_user_intent(self, article_content):
         
-        prompt = lecture_notes_generator_agent.format(article_content=article_content)
+        prompt = f"Create lecture note from following content : {article_content}"
         response = self.generate_response(prompt)
         tokens_used = len(response.split())
-        
 
         return json.dumps({
             "status": "success",

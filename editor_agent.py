@@ -21,13 +21,14 @@ Provide:
 
 
 class EditorAgent(Agent):
+    
+    prompt = editor_agent_prompt
+    
     def __init__(self, name, role):
         super().__init__(name, role)
-        self.model = genai.GenerativeModel('gemini-1.5-flash',
-                                           system_instruction=role)
 
     def edit_content(self, content):
-        prompt = editor_agent_prompt.format(content=content)
+        prompt = f"Edit the following content: {content}"
         response = self.generate_response(prompt)
 
         return {
