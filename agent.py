@@ -27,7 +27,7 @@ class Agent:
     def remove_quotes(self, text):
  
         # Remove unnecessary special characters while keeping structure
-        text = text.replace('*', '').replace('_', '')
+        text = text.replace('*', '')
         
         # Replace Markdown headers (e.g., ## Title) with clean new lines
         text = re.sub(r'#+\s?', '\n', text)  # Remove # and ensure a new line
@@ -40,7 +40,7 @@ class Agent:
         text = re.sub(r'\[.*?\]\(.*?\)', '', text)   # Remove links
         
         # Remove quotes
-        text = re.sub(r"[\"'](.+?)[\"']", r'\1', text)
+        #text = re.sub(r"[\"'](.+?)[\"']", r'\1', text)
         
         # Replace \n or escaped newlines with real newlines
         text = text.replace('\\n', '\n')
