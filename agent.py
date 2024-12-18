@@ -1,5 +1,6 @@
 import google.generativeai as genai
 import os
+import re
 
 try:
     genai.configure(api_key=os.environ["API_KEY"])
@@ -24,4 +25,18 @@ class Agent:
         return response.text
     
     def remove_quotes(self, text):
-        return text.replace('*', '').replace('', '').replace('#', '')
+        # Remove common unwanted characters and symbols
+        text = text.replace('*', '').replace('#', '').replace('_', '')  # Removing specific symbols
+
+        # Remove any text inside quotes (single or double) including the quotes themselves
+        text = re.sub(r"[\"'].+?[\"']", '', text)
+
+        # Remove other common markdown symbols (like links and image syntax)
+        text = re.sub(r'!\[.*?\]\(.*?\)', '', text)  # Remove image markdown
+        text = re.sub(r'\[.*?\]\(.*?\)', '', text)   # Remove link markdown
+
+        # Remove extra spaces or newlines created after replacements
+        text = re.sub(r'\s+', ' ', text).strip()
+
+        return text
+   
