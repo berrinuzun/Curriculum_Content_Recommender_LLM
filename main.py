@@ -59,11 +59,13 @@ def process_request(user_input, chat_history, pdf_file=None):
     status = "Storytelling content created."
 
     edited_lecture_notes = editor_agent.edit_content(cleaned_lecture_notes)
-    chat_history.append(("Bot", f"Lecture notes have been edited:\n{edited_lecture_notes}"))
+    cleaned_edited_lecture_output = editor_agent.remove_quotes(edited_lecture_notes)
+    chat_history.append(("Bot", f"Lecture notes have been edited:\n{cleaned_edited_lecture_output}"))
     status = "Lecture notes edited."
 
     edited_storytelling_notes = editor_agent.edit_content(cleaned_storytelling_output)
-    chat_history.append(("Bot", f"Storytelling content has been edited:\n{edited_storytelling_notes}"))
+    cleaned_edited_storytelling_output = editor_agent.remove_quotes(edited_storytelling_notes)
+    chat_history.append(("Bot", f"Storytelling content has been edited:\n{cleaned_edited_storytelling_output}"))
     status = "Storytelling content edited."
 
     pdf_path = pdf_generator_agent.generate_pdf(edited_lecture_notes, edited_storytelling_notes)
