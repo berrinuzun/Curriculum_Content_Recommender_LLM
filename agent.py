@@ -39,9 +39,6 @@ class Agent:
         text = re.sub(r'!\[.*?\]\(.*?\)', '', text)  # Remove images
         text = re.sub(r'\[.*?\]\(.*?\)', '', text)   # Remove links
         
-        # Remove quotes
-        #text = re.sub(r"[\"'](.+?)[\"']", r'\1', text)
-        
         # Replace \n or escaped newlines with real newlines
         text = text.replace('\\n', '\n')
         
