@@ -21,7 +21,6 @@ def extract_syllabus_requirements(pdf_text):
 
 def process_request(user_input, chat_history, pdf_file=None):
     
-    # Initialize agents
     article_retrieval_agent = ArticleRetrievalAgent("Article Retrieval Agent", ArticleRetrievalAgent.prompt)
     lecture_notes_generator_agent = LectureNotesGeneratorAgent("Lecture Notes Generator Agent", LectureNotesGeneratorAgent.prompt)
     storytelling_agent = StorytellingAgent("Storytelling Agent", StorytellingAgent.prompt)
@@ -75,13 +74,13 @@ def process_request(user_input, chat_history, pdf_file=None):
 
 def gradio_interface():
     with gr.Blocks() as app:
-        gr.Markdown("## Multi-Agent Content Generator Chatbot")
+        gr.Markdown("Curriculum Content Recommender for Professors")
 
         chatbot = gr.Chatbot()  
 
-        user_input = gr.Textbox(label="Enter your query", placeholder="Ask me anything...")
+        user_input = gr.Textbox(label="Enter topic", placeholder="Ask me anything...")
 
-        status = gr.Label("Status will appear here.")  # Label to show status
+        status = gr.Label("Status will appear here.")  
 
         pdf_file = gr.File(label="Upload syllabus PDF (optional)")
 
@@ -92,7 +91,7 @@ def gradio_interface():
         generate_button.click(
             process_request,
             inputs=[user_input, chatbot, pdf_file],
-            outputs=[chatbot, status, download_link]  # Output the status as well
+            outputs=[chatbot, status, download_link]  
         )
 
     return app

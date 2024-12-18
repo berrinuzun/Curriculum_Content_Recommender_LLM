@@ -25,17 +25,13 @@ class Agent:
         return response.text
     
     def remove_quotes(self, text):
-        # Remove common unwanted characters and symbols
-        text = text.replace('*', '').replace('#', '').replace('_', '')  # Removing specific symbols
-
-        # Remove any text inside quotes (single or double) including the quotes themselves
+ 
+        text = text.replace('*', '').replace('#', '').replace('_', '')  
         text = re.sub(r"[\"'].+?[\"']", '', text)
+        text = re.sub(r'!\[.*?\]\(.*?\)', '', text)
+        text = re.sub(r'\[.*?\]\(.*?\)', '', text)   
 
-        # Remove other common markdown symbols (like links and image syntax)
-        text = re.sub(r'!\[.*?\]\(.*?\)', '', text)  # Remove image markdown
-        text = re.sub(r'\[.*?\]\(.*?\)', '', text)   # Remove link markdown
-
-        # Remove extra spaces or newlines created after replacements
+        text = text.replace('\\n', '\n')
         text = re.sub(r'\s+', ' ', text).strip()
 
         return text
