@@ -26,13 +26,30 @@ class Agent:
     
     def remove_quotes(self, text):
  
-        text = text.replace('*', '').replace('#', '').replace('_', '')  
-        text = re.sub(r"[\"'].+?[\"']", '', text)
-        text = re.sub(r'!\[.*?\]\(.*?\)', '', text)
-        text = re.sub(r'\[.*?\]\(.*?\)', '', text)   
-
+        # Remove unnecessary special characters while keeping structure
+        text = text.replace('*', '').replace('_', '')
+        
+        # Replace Markdown headers (e.g., ## Title) with clean new lines
+        text = re.sub(r'#+\s?', '\n', text)  # Remove # and ensure a new line
+        
+        # Remove inline code (text between backticks)
+        text = re.sub(r'`[^`]*`', '', text)
+        
+        # Remove Markdown images and links
+        text = re.sub(r'!\[.*?\]\(.*?\)', '', text)  # Remove images
+        text = re.sub(r'\[.*?\]\(.*?\)', '', text)   # Remove links
+        
+        # Remove quotes
+        text = re.sub(r"[\"'](.+?)[\"']", r'\1', text)
+        
+        # Replace \n or escaped newlines with real newlines
         text = text.replace('\\n', '\n')
+        
+        # Normalize multiple newlines into a single one
+        text = re.sub(r'\n\s*\n', '\n\n', text)  # Ensure double spacing for readability
+        
+        # Remove excessive whitespace
         text = re.sub(r'\s+', ' ', text).strip()
-
+        
         return text
    
