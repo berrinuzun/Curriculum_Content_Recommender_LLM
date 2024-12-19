@@ -120,7 +120,7 @@ def process_request(user_input, chat_history, pdf_file=None):
     
     status = "Storytelling content edited."
 
-    pdf_path = pdf_generator_agent.generate_pdf(cleaned_edited_lecture_output, cleaned_edited_storytelling_output)
+    pdf_path = pdf_generator_agent.generate_pdf(edited_lecture_notes, edited_storytelling_notes)
     chat_history.append(("Bot", "PDF generated successfully!"))
     status = "PDF generated successfully."
 
