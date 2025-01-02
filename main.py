@@ -107,6 +107,7 @@ def extract_topic_from_query(user_input):
     return response
 
 def article_retrieval(topic):
+    
     article_content = article_retrieval_agent.retrieve_and_validate_articles(topic.strip())
     cleaned_article_content = article_retrieval_agent.remove_quotes(article_content)
 
@@ -120,10 +121,16 @@ def article_retrieval(topic):
     return formatted_article_json
 
 def generate_lecture_notes(articles, user_input, syllabus_requirements):
-    
+
     lecture_notes = lecture_notes_generator_agent.get_user_intent(articles, user_input)
     updated_lecture_notes = lecture_notes_generator_agent.update_lecture_notes(lecture_notes, syllabus_requirements)
     cleaned_lecture_notes = lecture_notes_generator_agent.remove_quotes(updated_lecture_notes)
+
+    try:
+        cleaned_notes_json = json.loads(cleaned_lecture_notes)  
+        cleaned_lecture_notes = cleaned_notes_json.get("notes", "Notes attribute not found")
+    except json.JSONDecodeError:
+        return "Invalid JSON format in cleaned_lecture_notes"
 
     lecture_notes_json_output = {
         "status": "success",
@@ -134,10 +141,17 @@ def generate_lecture_notes(articles, user_input, syllabus_requirements):
 
     return formatted_lecture_notes
 
+
 def generate_narrative_notes(lecture_notes):
     
     narrative_notes = storytelling_agent.get_user_intent(lecture_notes)
     cleaned_narrative_notes = storytelling_agent.remove_quotes(narrative_notes)
+    
+    try:
+        cleaned_narrative_json = json.loads(cleaned_narrative_notes)
+        cleaned_narrative_notes = cleaned_narrative_json.get("notes", "Notes attribute not found")
+    except json.JSONDecodeError:
+        return "Invalid JSON format"
     
     narrative_notes_output = {
         "status": "success",
@@ -153,6 +167,12 @@ def edit_notes(notes):
     edited_notes = editor_agent.edit_content(notes)
     cleaned_edited_notes = editor_agent.remove_quotes(edited_notes)
     
+    try:
+        cleaned_edited_json = json.loads(cleaned_edited_notes)
+        cleaned_edited_notes = cleaned_edited_json.get("notes", "Notes attribute not found")
+    except json.JSONDecodeError:
+        return "Invalid JSON format"
+    
     edited_notes_output = {
         "status": "success",
         "edited_notes": cleaned_edited_notes,
@@ -166,6 +186,12 @@ def recommend(query):
     
     recommendations = curriculum_content_recommender_agent.get_recommendations(query)
     cleaned_recommendations = curriculum_content_recommender_agent.remove_quotes(recommendations)
+    
+    try:
+        cleaned_recommendations_json = json.loads(cleaned_recommendations)
+        cleaned_recommendations = cleaned_recommendations_json.get("recommendations", "recommendations attribute not found")
+    except json.JSONDecodeError:
+        return "Invalid JSON format"
     
     recommendations_output = {
         "status": "success",

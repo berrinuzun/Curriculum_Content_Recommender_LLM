@@ -30,10 +30,10 @@ class PdfGeneratorAgent():
             
         # Recommendations
         if recommendations: 
-            recommendations_text = self.extract_attribute(recommendations, "recommendations")
+            recommendations_text = self.extract_attribute(recommendations, "notes")
             recommendations_cleaned = self.clean_text(recommendations_text)
             pdf.cell(200, 10, txt="Recommendations:", ln=True, align="L")
-            pdf.multi_cell(0, 10, txt=recommendations_cleaned)
+            pdf.multi_cell(0,10, txt=recommendations_cleaned)
             pdf.ln(10)
 
         pdf_output = "generated_pdf_output.pdf"
@@ -61,20 +61,8 @@ class PdfGeneratorAgent():
         return ''.join(c for c in text if ord(c) < 256)  
 
     def extract_attribute(self, json_data, attribute_name):
-        # Check if json_data is a string and parse it if so
+        
         if isinstance(json_data, str):
-            try:
-                json_data = json.loads(json_data)  # Parse JSON string to dict
-            except json.JSONDecodeError:
-                return "Invalid JSON format"
-
-        # Extract only the 'notes' attribute
-        notes = json_data.get(attribute_name, None)
+            json_data = json.loads(json_data)  
         
-        # If it's a dictionary, return the nested 'notes'
-        if isinstance(notes, dict):
-            nested_notes = notes.get("notes", "Nested notes not found")
-            return nested_notes
-        
-        # Return the 'notes' attribute value or a message if not found
-        return notes or "Notes attribute not found"
+        return json_data.get(attribute_name, "Attribute not found")
