@@ -93,7 +93,7 @@ class ArticleRetrievalAgent(Agent):
             return {"error": str(e)}
 
     def retrieve_and_validate_articles(self, query):
-       
+    
         articles = self.search_articles(query)
 
         if isinstance(articles, dict) and "error" in articles:

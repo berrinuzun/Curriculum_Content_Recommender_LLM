@@ -56,17 +56,39 @@ class LectureNotesGeneratorAgent(Agent):
     def __init__(self, name, role):
         super().__init__(name, role)
     
-    def get_user_intent(self, article_content):
+    def get_user_intent(self, article_content, user_input):
         
-        prompt = f"Create lecture note from following content : {article_content}"
+        prompt = f"""
+                     Create concise lecture notes from the following article content based on the user's request.
+                     
+                     Article Content:
+                     {article_content}
+                     
+                     User Request:
+                     {user_input}
+                     
+                     Summarize the relevant points from the article based on the user's request.
+                  """
         response = self.generate_response(prompt)
         tokens_used = len(response.split())
 
         return json.dumps({
             "status": "success",
-            "lecture_notes": response,
+            "notes": response,
             "tokens_used": tokens_used
         }, indent=4)
 
+    def update_lecture_notes(self, lecture_notes, syllabus_requirements):
+      
+      prompt = f"""
+                  Update lecture notes: {lecture_notes} according to syllabus requirements : {syllabus_requirements}
+      """
+      response = self.generate_response(prompt)
+      
+      return json.dumps({
+         "status": "success",
+         "notes": response,
+         "tokens_used": len(response.split())
+      }, indent=4)
 
 

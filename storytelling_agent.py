@@ -78,6 +78,6 @@ class StorytellingAgent(Agent):
         
         return json.dumps({
             "status" : "success",
-            "narrative" : response,
+            "notes" : response,
             "tokens_used" : tokens_used
         }, indent=4)
