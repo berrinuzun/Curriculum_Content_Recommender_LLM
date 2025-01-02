@@ -18,7 +18,7 @@ class PdfGeneratorAgent():
             lecture_notes_text = self.extract_attribute(lecture_notes, "notes")
             lecture_notes_cleaned = self.clean_text(lecture_notes_text)
             pdf.cell(200, 10, txt="Lecture Notes:", ln=True, align="L")
-            pdf.multi_cell(0, 10, txt=lecture_notes_cleaned)
+            self.write_text_with_colon_handling(pdf, lecture_notes_cleaned)
             pdf.ln(10)
 
         # Narrative Notes
@@ -26,20 +26,30 @@ class PdfGeneratorAgent():
             narrative_text = self.extract_attribute(narrative, "notes")
             narrative_cleaned = self.clean_text(narrative_text)
             pdf.cell(200, 10, txt="Narrative Notes:", ln=True, align="L")
-            pdf.multi_cell(0, 10, txt=narrative_cleaned)
+            self.write_text_with_colon_handling(pdf, narrative_cleaned)
+            pdf.ln(10)
             
         # Recommendations
         if recommendations: 
             recommendations_text = self.extract_attribute(recommendations, "notes")
             recommendations_cleaned = self.clean_text(recommendations_text)
             pdf.cell(200, 10, txt="Recommendations:", ln=True, align="L")
-            pdf.multi_cell(0,10, txt=recommendations_cleaned)
+            self.write_text_with_colon_handling(pdf, recommendations_cleaned)
             pdf.ln(10)
 
         pdf_output = "generated_pdf_output.pdf"
         pdf.output(pdf_output)
 
         return pdf_output
+
+    def write_text_with_colon_handling(self, pdf, text):
+        # Metni ':' karakterinden sonra böl ve alt satıra geçir
+        lines = text.split(":")
+        for i, line in enumerate(lines):
+            if i == 0:
+                pdf.multi_cell(0, 10, txt=f": {line.strip()}")  # İlk kısmı yaz
+            else:
+                pdf.multi_cell(0, 10, txt=f"{line.strip()}")  # Alt satıra geç ve ':' ekle
 
     def clean_text(self, text):
         replacements = {
