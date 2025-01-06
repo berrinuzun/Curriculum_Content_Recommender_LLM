@@ -22,6 +22,9 @@ formatted_article_json = None
 lecture_notes = None
 narrative_notes = None
 recommendations = None
+lecture = None
+narrative = None
+recommendation = None
 
 def create_db():
     conn = sqlite3.connect('chats.db')
@@ -124,6 +127,8 @@ def generate_lecture_notes(articles, user_input, syllabus_requirements):
 
     lecture_notes = lecture_notes_generator_agent.get_user_intent(articles, user_input)
     updated_lecture_notes = lecture_notes_generator_agent.update_lecture_notes(lecture_notes, syllabus_requirements)
+    global lecture 
+    lecture = updated_lecture_notes
     cleaned_lecture_notes = lecture_notes_generator_agent.remove_quotes(updated_lecture_notes)
 
     try:
@@ -145,6 +150,8 @@ def generate_lecture_notes(articles, user_input, syllabus_requirements):
 def generate_narrative_notes(lecture_notes):
     
     narrative_notes = storytelling_agent.get_user_intent(lecture_notes)
+    global narrative
+    narrative = narrative_notes
     cleaned_narrative_notes = storytelling_agent.remove_quotes(narrative_notes)
     
     try:
@@ -185,6 +192,8 @@ def edit_notes(notes):
 def recommend(query):
     
     recommendations = curriculum_content_recommender_agent.get_recommendations(query)
+    global recommendation
+    recommendation = recommendations
     cleaned_recommendations = curriculum_content_recommender_agent.remove_quotes(recommendations)
     
     try:
@@ -264,7 +273,7 @@ def process_user_query(user_input, chat_history, pdf_file=None):
         try:
             if "lecture" in user_input.lower() and ("storytelling" in user_input.lower() or "narrative" in user_input.lower()):
                 if lecture_notes and narrative_notes:  # Ensure both notes are not empty
-                    pdf_path = pdf_generator_agent.generate_pdf(lecture_notes, narrative_notes,None)
+                    pdf_path = pdf_generator_agent.generate_pdf(lecture, narrative,None)
                     chat_history.append(("Bot", "PDF generated successfully!"))
                     status = "PDF generated successfully."
                 else:
@@ -272,7 +281,7 @@ def process_user_query(user_input, chat_history, pdf_file=None):
                     status = "Missing notes to generate the PDF."
             elif "lecture" in user_input.lower():
                 if lecture_notes:  # Ensure lecture notes are not empty
-                    pdf_path = pdf_generator_agent.generate_pdf(lecture_notes, None, None)
+                    pdf_path = pdf_generator_agent.generate_pdf(lecture, None, None)
                     chat_history.append(("Bot", "PDF generated successfully!"))
                     status = "PDF generated successfully."
                 else:
@@ -280,14 +289,14 @@ def process_user_query(user_input, chat_history, pdf_file=None):
                     status = "Missing lecture notes to generate the PDF."
             elif "storytelling" in user_input.lower() or "narrative" in user_input.lower():
                 if narrative_notes:  # Ensure storytelling notes are not empty
-                    pdf_path = pdf_generator_agent.generate_pdf(narrative_notes, None, None)
+                    pdf_path = pdf_generator_agent.generate_pdf(narrative, None, None)
                     chat_history.append(("Bot", "PDF generated successfully!"))
                     status = "PDF generated successfully."
                 else:
                     chat_history.append(("Bot", "Storytelling notes are missing."))
                     status = "Missing storytelling notes to generate the PDF."
             elif "recommendations" in user_input.lower():
-                pdf_path = pdf_generator_agent.generate_pdf(None, None, recommendations)
+                pdf_path = pdf_generator_agent.generate_pdf(None, None, recommendation)
                 chat_history.append(("Bot", "PDF generated successfully!"))
                 status = "PDF generated successfully."
             else:
